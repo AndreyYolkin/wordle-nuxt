@@ -1,0 +1,7 @@
+{
+  "folder-path-color.folders": [
+    { "path": "app", "tooltip": "Client files", "color": "green" },
+    { "path": "server", "tooltip": "Nitro files", "color": "magenta" },
+    { "path": "shared", "tooltip": "Shared files", "color": "yellow" },
+  ],
+}
