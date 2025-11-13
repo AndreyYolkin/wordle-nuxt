@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
   import type { TileState } from '#shared/types'
-  const props = defineProps<{ label: string; state?: TileState; wide?: boolean }>()
+  const props = defineProps<{ label: string, state?: TileState, wide?: boolean }>()
   defineEmits<{ (e: 'click'): void }>()
 
   const displayLabel = computed(() => props.label.toLocaleUpperCase('ru-RU'))
@@ -20,7 +20,7 @@
       case 'correct': {
         return 'bg-green-500 text-white'
       }
-      case 'present': { 
+      case 'present': {
         return 'bg-yellow-500 text-white'
       }
       case 'absent': {

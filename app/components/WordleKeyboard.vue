@@ -36,7 +36,7 @@
   import type { TileState } from '#shared/types'
   import KeyboardKey from './KeyboardKey.vue'
   defineProps<{ keyboard: Record<string, TileState> }>()
-  const emit = defineEmits<{ (e: 'key', k: string): void; (e: 'enter' | 'backspace'): void }>()
+  const emit = defineEmits<{ (e: 'key', k: string): void, (e: 'enter' | 'backspace'): void }>()
 
   const kbRow1 = 'ËЙЦУКЕНГШЩЗ'.split('')
   const kbRow2 = 'ФЫВАПРОЛДЖЭ'.split('')

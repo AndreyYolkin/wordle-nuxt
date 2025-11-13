@@ -12,7 +12,7 @@
   import type { TileState } from '#shared/types'
   import WordleCell from './WordleCell.vue'
 
-  const props = defineProps<{ rows: number; cols: number; guesses: string[]; current: string; evaluations: TileState[][] }>()
+  const props = defineProps<{ rows: number, cols: number, guesses: string[], current: string, evaluations: TileState[][] }>()
 
   function tileLetter (rowIdx: number, colIdx: number): string {
     if (rowIdx < props.guesses.length) return props.guesses[rowIdx]![colIdx] ?? ''

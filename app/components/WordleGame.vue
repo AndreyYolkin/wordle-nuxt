@@ -43,13 +43,21 @@
     submitGuess,
     backspace,
     addLetter,
-    pressKey
+    pressKey,
   } = useWordleGame({ solution: props.solution })
 
   function handleKeydown (e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey) return
-    if (e.key === 'Enter') { e.preventDefault(); submitGuess(); return }
-    if (e.key === 'Backspace') { e.preventDefault(); backspace(); return }
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      submitGuess()
+      return
+    }
+    if (e.key === 'Backspace') {
+      e.preventDefault()
+      backspace()
+      return
+    }
     if (e.key.length === 1) addLetter(e.key)
   }
 

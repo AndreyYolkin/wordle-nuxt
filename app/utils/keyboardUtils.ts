@@ -6,12 +6,12 @@ export function updateKeyboardState (
   guess: string,
   evals: TileState[],
   locale = DEFAULT_LOCALE): Record<string, TileState> {
-  const rank = (st: TileState | undefined) => 
+  const rank = (st: TileState | undefined) =>
     ({ unknown: 0, absent: 1, present: 2, correct: 3 }[st ?? 'unknown'])
-  
+
   const len = Math.min(guess.length, evals.length)
   const newKeyboard = { ...currentKeyboard }
-  
+
   for (let i = 0; i < len; i++) {
     const k = guess.charAt(i).toLocaleUpperCase(locale)
     const prev = newKeyboard[k]
@@ -20,6 +20,6 @@ export function updateKeyboardState (
       newKeyboard[k] = curr
     }
   }
-  
+
   return newKeyboard
 }

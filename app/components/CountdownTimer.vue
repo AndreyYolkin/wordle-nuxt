@@ -20,30 +20,30 @@
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
   })
 
-  function updateTimer(timestamp: number) {
+  function updateTimer (timestamp: number) {
     if (timestamp - lastUpdateTime >= 1000) {
       timeUntilNextDay.value = getTimeUntilNextDay()
       lastUpdateTime = timestamp
-      
+
       if (timeUntilNextDay.value.isOver) {
         clearCountdown()
         return
       }
     }
-    
+
     if (animationFrameId !== null) {
       animationFrameId = requestAnimationFrame(updateTimer)
     }
   }
 
-  function clearCountdown() {
+  function clearCountdown () {
     if (animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId)
       animationFrameId = null
     }
   }
 
-  function startCountdown() {
+  function startCountdown () {
     if (animationFrameId === null) {
       lastUpdateTime = performance.now()
       animationFrameId = requestAnimationFrame(updateTimer)
@@ -56,8 +56,8 @@
 
   onUnmounted(clearCountdown)
   onBeforeUnmount(clearCountdown)
-  
-  watchEffect((onCleanup) => {
+
+  watchEffect(onCleanup => {
     onCleanup(clearCountdown)
   })
 </script>

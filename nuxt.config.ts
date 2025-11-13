@@ -5,10 +5,10 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true,
-      openAPI: true
+      openAPI: true,
     },
   },
   experimental: {
-    typedPages: true
-  }
+    typedPages: true,
+  },
 })

@@ -8,7 +8,7 @@ export function evaluateGuess (guess: string, solution: string, locale = DEFAULT
   const len = s.length
   const res: TileState[] = Array.from({ length: len }, () => 'absent')
   const counts: Record<string, number> = {}
-  
+
   for (let i = 0; i < len; i++) {
     const si = s.charAt(i)
     counts[si] = (counts[si] ?? 0) + 1
@@ -22,9 +22,11 @@ export function evaluateGuess (guess: string, solution: string, locale = DEFAULT
       counts[gi] = (counts[gi] ?? 0) - 1
     }
   }
-  
+
   for (let i = 0; i < len; i++) {
-    if (res[i] === 'correct') {continue}
+    if (res[i] === 'correct') {
+      continue
+    }
     const gi = g.charAt(i)
     if ((counts[gi] ?? 0) > 0) {
       res[i] = 'present'
@@ -33,6 +35,6 @@ export function evaluateGuess (guess: string, solution: string, locale = DEFAULT
       res[i] = 'absent'
     }
   }
-  
+
   return res
 }

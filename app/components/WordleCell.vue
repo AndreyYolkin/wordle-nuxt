@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
   import type { TileState } from '#shared/types'
-  const props = defineProps<{ letter: string; state: TileState }>()
+  const props = defineProps<{ letter: string, state: TileState }>()
 
   const stateClass = computed(() => {
     switch (props.state) {
