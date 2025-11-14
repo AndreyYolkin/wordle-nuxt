@@ -5,6 +5,7 @@
   "scripts": {
     "build:server": "BUILD_FORMAT=server nuxt build",
     "build:client": "BUILD_FORMAT=client nuxt generate",
+    "build": "BUILD_FORMAT=fullstack nuxt build",
     "dev": "nuxt dev",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
