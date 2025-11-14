@@ -16,3 +16,8 @@ export const isValidRussianLetter = (ch: string): boolean => /^[а-яА-ЯёЁ]$
 export function validateWordLength (word: string, expectedLength: number): boolean {
   return word.length === expectedLength
 }
+
+export function getRandomWord (): string {
+  const randomIndex = Math.floor(Math.random() * WORD_COUNT)
+  return WORDS[randomIndex]!
+}

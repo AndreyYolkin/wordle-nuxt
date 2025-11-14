@@ -8,6 +8,13 @@ export const getTodaysIndex = (): number => getWarsawNow().startOf('day').toSeco
 
 export const getWarsawDateKey = (): Date => getWarsawNow().toJSDate()
 
+export function getSecondsUntilNextDay (): number {
+  const now = getWarsawNow()
+  const tomorrow = now.plus({ days: 1 }).startOf('day')
+  const diff = tomorrow.diff(now, ['seconds'])
+  return Math.max(0, Math.floor(diff.seconds))
+}
+
 export function getTimeUntilNextDay (): { isOver: boolean, hours: number, minutes: number, seconds: number } {
   const now = getWarsawNow()
   const tomorrow = now.plus({ days: 1 }).startOf('day')
