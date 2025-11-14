@@ -31,7 +31,7 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
   const { solution, maxRows = 6 } = options
 
   const rows = maxRows
-  const cols = solution.length
+  const cols = LETTERS_COUNT
 
   const guesses = ref<string[]>([])
   const evaluations = ref<TileState[][]>([])
@@ -45,19 +45,19 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
     WORD_NOT_IN_DICTIONARY: 'Слово не найдено в словаре',
   } as const
 
-  type ErrorType = (typeof ERROR_TYPES)[keyof typeof ERROR_TYPES]
+  type ErrorType = keyof typeof ERROR_TYPES
 
   function validateGuess (): { isValid: boolean, error?: ErrorType } {
     if (gameState.value !== 'playing') {
-      return { isValid: false, error: ERROR_TYPES.INVALID_GAME_STATE }
+      return { isValid: false, error: 'INVALID_GAME_STATE' }
     }
 
     if (!validateWordLength(current.value, cols)) {
-      return { isValid: false, error: ERROR_TYPES.INVALID_WORD_LENGTH }
+      return { isValid: false, error: 'INVALID_WORD_LENGTH' }
     }
 
     if (!isWordInDictionary(current.value)) {
-      return { isValid: false, error: ERROR_TYPES.WORD_NOT_IN_DICTIONARY }
+      return { isValid: false, error: 'WORD_NOT_IN_DICTIONARY' }
     }
 
     return { isValid: true }
@@ -67,11 +67,10 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
     const normalizedGuess = normalizeWord(word, locale)
     return hasWord(normalizedGuess, normalizedGuess)
   }
-
-  function handleValidationError (error: string) {
+  function handleValidationError (errorKey: ErrorType) {
     current.value = ''
-    toast.error(error, {
-      description: error === ERROR_TYPES.INVALID_GAME_STATE ? 'Начните новую игру, чтобы продолжить' : 'Попробуйте другое слово',
+    toast.error(ERROR_TYPES[errorKey], {
+      description: errorKey === 'INVALID_GAME_STATE' ? 'Начните новую игру, чтобы продолжить' : 'Попробуйте другое слово',
     })
   }
 
