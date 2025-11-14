@@ -54,7 +54,6 @@
   const { data, refresh } = useFetch('/api/stats', {
     immediate: loggedIn.value,
     watch: false,
-    baseURL: 'http://localhost:3000',
   })
 
   const showCreateRoom = ref(false)
