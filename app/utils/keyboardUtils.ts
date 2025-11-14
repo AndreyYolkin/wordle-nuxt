@@ -1,5 +1,5 @@
 import type { TileState } from '#shared/types'
-import { DEFAULT_LOCALE } from '~~/shared/constants'
+import { DEFAULT_LOCALE } from '#shared/constants'
 
 export function updateKeyboardState (
   currentKeyboard: Record<string, TileState>,
