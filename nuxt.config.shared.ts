@@ -8,6 +8,10 @@ export default defineNuxtConfig({
       openAPI: true,
     },
   },
+  runtimeConfig: {
+    TURSO_CONNECTION_URL: '',
+    TURSO_AUTH_TOKEN: '',
+  },
   experimental: {
     typedPages: true,
   },
