@@ -1,0 +1,27 @@
+###
+GET http://localhost:3000/api/hello
+
+###
+GET http://localhost:3000/api/word/daily
+
+###
+
+POST http://localhost:3000/api/room
+Content-Type: application/json
+
+{
+  "word": "семпл",
+  "duration": 2
+}
+
+###
+
+POST http://localhost:3000/api/word/guess
+Content-Type: application/json
+
+{
+  "roomId": "r_am0Ye-z4icm086C-rGp",
+  "word": "семпл"
+}
+
+###

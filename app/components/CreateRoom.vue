@@ -85,6 +85,8 @@
 </template>
 
 <script setup lang="ts">
+  import type { CreatePrivateRoom } from '#shared/schemas'
+
   const roomType = ref<'random' | 'custom'>('random')
   const customWord = ref('')
   const duration = ref(24)
@@ -100,21 +102,23 @@
     createdRoom.value = null
 
     try {
-      const body: any = {
+      const body = {
         type: 'private',
         duration: duration.value,
-      }
+        word: '',
+      } satisfies CreatePrivateRoom
 
       if (roomType.value === 'custom' && customWord.value) {
         body.word = customWord.value
       }
 
-      const response = await $fetch('/api/room/create', {
+      const response = await $fetch('/api/room', {
         method: 'POST',
         body,
       })
 
       createdRoom.value = response
+      createdRoom.value.shareUrl = `${window.location.origin}/room/${createdRoom.value.id}`
     } catch (error_: any) {
       error.value = error_.data?.message || error_.message || 'Ошибка при создании комнаты'
     } finally {

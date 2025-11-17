@@ -1,13 +1,12 @@
 import type { GameState, TileState } from '#shared/types'
-import { DEFAULT_LOCALE } from '#shared/constants'
-import { evaluateGuess } from '#shared/utils/guess'
-import { hasWord, isValidRussianLetter, normalizeWord, validateWordLength } from '#shared/utils/word'
+import { DEFAULT_LOCALE, LETTERS_COUNT } from '#shared/constants'
+import { isValidRussianLetter, validateWordLength } from '#shared/utils/word'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { updateKeyboardState } from '../utils/keyboardUtils'
 
 export interface UseWordleGameOptions {
-  solution: string
+  roomId: string
   maxRows?: number
 }
 
@@ -28,7 +27,7 @@ export interface UseWordleGameReturn {
 const locale = DEFAULT_LOCALE
 
 export function useWordleGame (options: UseWordleGameOptions): UseWordleGameReturn {
-  const { solution, maxRows = 6 } = options
+  const { roomId, maxRows = 6 } = options
 
   const rows = maxRows
   const cols = LETTERS_COUNT
@@ -47,26 +46,29 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
 
   type ErrorType = keyof typeof ERROR_TYPES
 
-  function validateGuess (): { isValid: boolean, error?: ErrorType } {
+  async function validateGuess (): Promise<{ isValid: boolean, error?: ErrorType, evaluation: TileState[] }> {
     if (gameState.value !== 'playing') {
-      return { isValid: false, error: 'INVALID_GAME_STATE' }
+      return { isValid: false, error: 'INVALID_GAME_STATE', evaluation: [] }
     }
 
     if (!validateWordLength(current.value, cols)) {
-      return { isValid: false, error: 'INVALID_WORD_LENGTH' }
+      return { isValid: false, error: 'INVALID_WORD_LENGTH', evaluation: [] }
     }
 
-    if (!isWordInDictionary(current.value)) {
-      return { isValid: false, error: 'WORD_NOT_IN_DICTIONARY' }
+    try {
+      const validation = await $fetch('/api/word/guess', {
+        method: 'POST',
+        body: {
+          word: current.value,
+          roomId,
+        },
+      })
+      return validation
+    } catch {
+      return { isValid: false, error: 'WORD_NOT_IN_DICTIONARY', evaluation: [] }
     }
-
-    return { isValid: true }
   }
 
-  function isWordInDictionary (word: string): boolean {
-    const normalizedGuess = normalizeWord(word, locale)
-    return hasWord(normalizedGuess, normalizedGuess)
-  }
   function handleValidationError (errorKey: ErrorType) {
     current.value = ''
     toast.error(ERROR_TYPES[errorKey], {
@@ -74,33 +76,24 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
     })
   }
 
-  function processValidGuess () {
-    const evals = evaluateGuess(current.value, solution)
-    guesses.value.push(current.value)
-    evaluations.value.push(evals)
-    keyboard.value = updateKeyboardState(keyboard.value, current.value, evals, locale)
+  async function submitGuess () {
+    const validation = await validateGuess()
+    if (!validation.isValid && validation.error) {
+      handleValidationError(validation.error)
+    }
 
-    const normalizedGuess = normalizeWord(current.value, locale)
-    const normalizedSolution = normalizeWord(solution, locale)
+    if (validation.evaluation.length > 0) {
+      guesses.value.push(current.value)
+      evaluations.value.push(validation.evaluation)
+      keyboard.value = updateKeyboardState(keyboard.value, current.value, validation.evaluation, locale)
 
-    if (normalizedGuess === normalizedSolution) {
-      gameState.value = 'won'
-    } else if (guesses.value.length >= rows) {
-      gameState.value = 'lost'
+      if (validation.isValid) {
+        gameState.value = 'won'
+      } else if (guesses.value.length >= rows) {
+        gameState.value = 'lost'
+      }
     }
     current.value = ''
-  }
-
-  function submitGuess () {
-    const validation = validateGuess()
-    if (!validation.isValid) {
-      if (validation.error) {
-        handleValidationError(validation.error)
-      }
-      return
-    }
-
-    processValidGuess()
   }
 
   function backspace () {

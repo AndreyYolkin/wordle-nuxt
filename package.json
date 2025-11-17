@@ -7,6 +7,7 @@
     "build:client": "BUILD_FORMAT=client nuxt generate",
     "build": "BUILD_FORMAT=fullstack nuxt build",
     "dev": "nuxt dev",
+    "prepare": "mkdir .data",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },

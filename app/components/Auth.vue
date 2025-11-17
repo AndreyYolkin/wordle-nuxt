@@ -1,6 +1,6 @@
 <template>
-  <AuthState>
-    <div class="flex items-center pa-4 justify-center gap-4 bg-white/90 backdrop-blur-md shadow-md max-w-3xl w-full rounded-xl">
+  <div class="flex items-center pa-4 justify-center gap-4 bg-white/90 backdrop-blur-md shadow-md max-w-3xl w-full rounded-xl">
+    <AuthState>
       <button v-if="!loggedIn" @click="openInPopup('/github')">Login</button>
       <template v-else>
         <div v-if="user" class="flex items-center px-2 py-1 gap-2 rounded-md bg-slate-100 text-slate-600">
@@ -21,24 +21,24 @@
         <button
           class="inline-flex items-center px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-sm font-medium transition-colors"
           type="button"
-          @click="showCreateRoom = true"
-        >
-          Создать комнату
-        </button>
-        <button
-          class="inline-flex items-center px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-sm font-medium transition-colors"
-          type="button"
           @click="clear"
         >
           Logout
         </button>
       </template>
-    </div>
 
-    <template #placeholder>
-      <p>Loading...</p>
-    </template>
-  </AuthState>
+      <template #placeholder>
+        <p>Loading...</p>
+      </template>
+    </AuthState>
+    <button
+      class="inline-flex items-center px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-sm font-medium transition-colors"
+      type="button"
+      @click="showCreateRoom = true"
+    >
+      Создать комнату
+    </button>
+  </div>
 
   <div v-if="showCreateRoom" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
     <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">

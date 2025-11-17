@@ -1,10 +1,46 @@
-import { LETTERS_COUNT } from '#shared/constants'
+import { createPrivateRoomSchema } from '#shared/schemas'
+import { getRandomWord, hasWord, normalizeWord } from '#shared/utils/word'
+import { DateTime } from 'luxon'
 import * as v from 'valibot'
+import { roomsRepo } from '../db/repos/roomRepo'
 
-const schema = v.object({
-  word: v.optional(v.pipe(v.string(), v.length(LETTERS_COUNT))),
-  type: v.optional(v.picklist(['private'], 'private')),
-  duration: v.optional(v.pipe(v.number(), v.minValue(1), v.maxValue(24 * 7)), 24),
+export default defineEventHandler(async event => {
+  const body = await readValidatedBody(event, d => v.parse(createPrivateRoomSchema, d))
+
+  const { word: customWord, duration } = body
+
+  let finalWord: string
+
+  if (customWord) {
+    const normalizedWord = normalizeWord(customWord)
+
+    if (!hasWord(normalizedWord, customWord)) {
+      throw createError({
+        statusCode: 400,
+        message: 'Word is not in the dictionary',
+      })
+    }
+
+    finalWord = normalizedWord
+  } else {
+    finalWord = getRandomWord()
+  }
+
+  const now = new Date()
+  const expiresAt = DateTime.fromJSDate(now).plus({ hours: duration }).toJSDate()
+
+  const room = await roomsRepo.createRoom({
+    type: 'private',
+    word: finalWord,
+    createdAt: now,
+    expiresAt,
+  })
+
+  return {
+    id: room.id,
+    word: finalWord,
+    expiresAt: room.expiresAt,
+    type: 'private',
+    shareUrl: `/room/${room.id}`,
+  }
 })
-
-export default defineEventHandler(async event => {})
