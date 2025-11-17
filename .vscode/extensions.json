@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "humao.rest-client",
+    "nuxtr.nuxt-vscode-extentions",
+    "antfu.unocss",
+    "visbydev.folder-path-color",
+    "qwtel.sqlite-viewer"
+  ]
+}
