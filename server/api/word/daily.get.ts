@@ -1,5 +1,6 @@
 import { getSecondsUntilNextDay, getTodaysIndex, getWarsawDateKey } from '#shared/utils/timezone'
 import { getWordByIndex } from '#shared/utils/word'
+import { roomsRepo } from '../../db/repos/roomRepo'
 
 export default defineCachedEventHandler(async event => {
   handleCors(event, {
@@ -9,10 +10,25 @@ export default defineCachedEventHandler(async event => {
   const wordIndex = getTodaysIndex()
   const word = getWordByIndex(wordIndex)
 
-  // TODO: search for daily room, otherwise create new one
+  const todayRoom = await roomsRepo.findRoomByDate(dateKey)
 
-  // TODO: add roomId to data
+  let roomId = todayRoom?.id
+
+  if (!todayRoom) {
+    const tomorrow = getTomorrowStartOfDay().toJSDate()
+
+    const room = (await roomsRepo.createRoom({
+      type: 'daily',
+      word,
+      createdAt: dateKey,
+      expiresAt: tomorrow,
+    }))
+
+    roomId = room.id
+  }
+
   const data = {
+    id: roomId!,
     date: dateKey,
     word,
   }

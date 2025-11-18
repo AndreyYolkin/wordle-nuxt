@@ -5,9 +5,8 @@ import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { updateKeyboardState } from '../utils/keyboardUtils'
 
-// TODO define roomId
-
 export interface UseWordleGameOptions {
+  roomId: string
   maxRows?: number
 }
 
@@ -28,8 +27,7 @@ export interface UseWordleGameReturn {
 const locale = DEFAULT_LOCALE
 
 export function useWordleGame (options: UseWordleGameOptions): UseWordleGameReturn {
-  // TODO extract roomId
-  const { maxRows = 6 } = options
+  const { roomId, maxRows = 6 } = options
 
   const rows = maxRows
   const cols = LETTERS_COUNT
@@ -61,7 +59,7 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
       const validation = await $fetch('/api/word/guess', {
         method: 'POST',
         body: {
-          // TODO pass roomId
+          roomId,
           word: current.value,
         },
       })

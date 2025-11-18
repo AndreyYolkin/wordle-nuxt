@@ -2,7 +2,7 @@ import * as v from 'valibot'
 import { LETTERS_COUNT } from '../constants'
 
 export const createGuessSchema = v.object({
-  // TODO add roomId
+  roomId: v.string(),
   word: v.pipe(v.string(), v.length(LETTERS_COUNT)),
 })
 

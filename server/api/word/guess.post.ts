@@ -4,6 +4,7 @@ import { createGuessSchema } from '#shared/schemas'
 import { evaluateGuess } from '#shared/utils/guess'
 import { hasWord, normalizeWord } from '#shared/utils/word'
 import * as v from 'valibot'
+import { roomsRepo } from '../../db/repos/roomRepo'
 
 export default defineEventHandler(async event => {
   handleCors(event, {
@@ -19,7 +20,7 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const { word } = body
+  const { word, roomId } = body
   const normalizedWord = normalizeWord(word, DEFAULT_LOCALE)
   const isInDictionary = hasWord(normalizedWord, word)
 
@@ -30,11 +31,15 @@ export default defineEventHandler(async event => {
     })
   }
 
-  // TODO retrieve word by roomId
-  const wordIndex = getTodaysIndex()
-  const dailyWord = getWordByIndex(wordIndex)
+  const room = await roomsRepo.getRoomById(roomId)
+  if (!room) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'ROOM_NOT_FOUND',
+    })
+  }
 
-  const evaluation = evaluateGuess(normalizedWord, dailyWord)
+  const evaluation = evaluateGuess(normalizedWord, room.word)
 
   return {
     evaluation,
