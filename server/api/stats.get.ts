@@ -20,8 +20,7 @@ export default defineEventHandler(async event => {
     return {
       stats,
     }
-  } catch (error) {
-    console.error('Failed to fetch statistics:', error)
+  } catch {
     throw createError({
       statusCode: 500,
       statusMessage: 'STATS_FETCH_FAILED',
