@@ -9,13 +9,7 @@
 </template>
 
 <script setup lang="ts">
-  import { getStartOfDay } from '#shared/utils/timezone'
-  import { getWordByIndex } from '#shared/utils/word'
-
-  const data = {
-    word: getWordByIndex(getTodaysIndex()),
-    date: getStartOfDay().toISODate(),
-  }
+  const { data } = await useFetch('/api/word/daily')
 
   useHead({
     title: 'Grawordle | Слово дня',

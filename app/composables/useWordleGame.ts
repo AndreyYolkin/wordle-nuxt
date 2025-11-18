@@ -1,12 +1,13 @@
 import type { GameState, TileState } from '#shared/types'
 import { DEFAULT_LOCALE, LETTERS_COUNT } from '#shared/constants'
-import { hasWord, isValidRussianLetter, validateWordLength } from '#shared/utils/word'
+import { isValidRussianLetter, validateWordLength } from '#shared/utils/word'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { updateKeyboardState } from '../utils/keyboardUtils'
 
+// TODO define roomId
+
 export interface UseWordleGameOptions {
-  solution: string
   maxRows?: number
 }
 
@@ -27,7 +28,8 @@ export interface UseWordleGameReturn {
 const locale = DEFAULT_LOCALE
 
 export function useWordleGame (options: UseWordleGameOptions): UseWordleGameReturn {
-  const { solution, maxRows = 6 } = options
+  // TODO extract roomId
+  const { maxRows = 6 } = options
 
   const rows = maxRows
   const cols = LETTERS_COUNT
@@ -46,7 +48,7 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
 
   type ErrorType = keyof typeof ERROR_TYPES
 
-  function validateGuess (): { isValid: boolean, error?: ErrorType, evaluation: TileState[] } {
+  async function validateGuess (): Promise<{ isValid: boolean, error?: ErrorType, evaluation: TileState[] }> {
     if (gameState.value !== 'playing') {
       return { isValid: false, error: 'INVALID_GAME_STATE', evaluation: [] }
     }
@@ -55,13 +57,18 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
       return { isValid: false, error: 'INVALID_WORD_LENGTH', evaluation: [] }
     }
 
-    if (!hasWord(current.value, normalizeWord(current.value))) {
+    try {
+      const validation = await $fetch('/api/word/guess', {
+        method: 'POST',
+        body: {
+          // TODO pass roomId
+          word: current.value,
+        },
+      })
+      return validation
+    } catch {
       return { isValid: false, error: 'WORD_NOT_IN_DICTIONARY', evaluation: [] }
     }
-
-    const evaluation = evaluateGuess(current.value, solution)
-
-    return { isValid: evaluation.every(t => t === 'correct'), evaluation }
   }
 
   function handleValidationError (errorKey: ErrorType) {

@@ -30,7 +30,8 @@
   import WordleGrid from './WordleGrid.vue'
   import WordleKeyboard from './WordleKeyboard.vue'
 
-  const props = defineProps<{ solution: string, dateKey?: string }>()
+  // Feature: receive roomId from props
+  defineProps<{ solution: string, dateKey?: string }>()
 
   const {
     guesses,
@@ -44,7 +45,8 @@
     backspace,
     addLetter,
     pressKey,
-  } = useWordleGame({ solution: props.solution })
+    // TODO pass roomId
+  } = useWordleGame({})
 
   function handleKeydown (e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey) return
