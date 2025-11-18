@@ -13,7 +13,7 @@
   import { getWordByIndex } from '#shared/utils/word'
 
   const data = {
-    word: getWordByIndex(getStartOfDay().toSeconds()),
+    word: getWordByIndex(getTodaysIndex()),
     date: getStartOfDay().toISODate(),
   }
 
