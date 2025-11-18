@@ -9,6 +9,12 @@ export const createPrivateRoomSchema = v.object({
   duration: v.optional(v.pipe(v.number(), v.minValue(1), v.maxValue(24 * 7)), 24),
 })
 
+export const getRoomSchema = v.object({
+  roomId: v.string(),
+})
+
 export type RoomType = v.InferOutput<typeof roomTypeSchema>
 
 export type CreatePrivateRoom = v.InferInput<typeof createPrivateRoomSchema>
+
+export type GetRoom = v.InferInput<typeof getRoomSchema>

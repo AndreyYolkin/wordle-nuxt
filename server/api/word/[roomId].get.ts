@@ -1,15 +1,14 @@
+import { DateTime } from 'luxon'
 import * as v from 'valibot'
+import { getRoomSchema } from '~~/shared/schemas'
+import { getTZTime } from '~~/shared/utils/timezone'
 import { roomsRepo } from '../../db/repos/roomRepo'
-
-const requestSchema = v.object({
-  roomId: v.pipe(v.string()),
-})
 
 export default defineEventHandler(async event => {
   handleCors(event, {
     origin: '*',
   })
-  const { roomId } = await getValidatedRouterParams(event, d => v.parse(requestSchema, d))
+  const { roomId } = await getValidatedRouterParams(event, d => v.parse(getRoomSchema, d))
 
   const room = await roomsRepo.getRoomById(roomId)
 
@@ -20,11 +19,15 @@ export default defineEventHandler(async event => {
     })
   }
 
-  if (room.expiresAt && new Date() > room.expiresAt) {
-    throw createError({
-      statusCode: 410,
-      message: 'Room has expired',
-    })
+  if (room.expiresAt) {
+    const now = getTZTime()
+    const expiresAt = DateTime.fromJSDate(room.expiresAt)
+    if (now.diff(expiresAt).milliseconds > 0) {
+      throw createError({
+        statusCode: 410,
+        message: 'Room has expired',
+      })
+    }
   }
 
   return {

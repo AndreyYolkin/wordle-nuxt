@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { TIMEZONE } from '../constants'
 import { WORD_COUNT } from './word'
 
-const getTZTime = (): DateTime => DateTime.now().setZone(TIMEZONE)
+export const getTZTime = (): DateTime => DateTime.now().setZone(TIMEZONE)
 
 export const getStartOfDay = (): DateTime => getTZTime().startOf('day')
 
