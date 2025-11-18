@@ -4,13 +4,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   nitro: {
     experimental: {
-      tasks: true,
       openAPI: true,
     },
-  },
-  runtimeConfig: {
-    TURSO_CONNECTION_URL: '',
-    TURSO_AUTH_TOKEN: '',
   },
   experimental: {
     typedPages: true,
