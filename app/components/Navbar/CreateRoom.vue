@@ -88,7 +88,7 @@
   import type { CreatePrivateRoom } from '#shared/schemas'
 
   const roomType = ref<'random' | 'custom'>('random')
-  const customWord = ref('')
+  const customWord = ref<string | null>(null)
   const duration = ref(24)
   const isCreating = ref(false)
   const createdRoom = ref<any>(null)
@@ -102,11 +102,11 @@
     createdRoom.value = null
 
     try {
-      const body = {
+      const body: CreatePrivateRoom = {
         type: 'private',
         duration: duration.value,
-        word: '',
-      } satisfies CreatePrivateRoom
+        word: undefined,
+      }
 
       if (roomType.value === 'custom' && customWord.value) {
         body.word = customWord.value
@@ -117,6 +117,7 @@
         body,
       })
 
+      customWord.value = null
       createdRoom.value = response
       createdRoom.value.shareUrl = `${window.location.origin}/room/${createdRoom.value.id}`
     } catch (error_: any) {
