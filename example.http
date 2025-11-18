@@ -1,26 +1,42 @@
+@baseUrl = http://localhost:3000
 ###
-GET http://localhost:3000/api/hello
+GET {{baseUrl}}/api/hello
 
 ###
-GET http://localhost:3000/api/word/daily
+GET {{baseUrl}}/api/word/daily
 
 ###
+# @name createRoom
 
-POST http://localhost:3000/api/room
+POST {{baseUrl}}/api/room
 Content-Type: application/json
 
 {
   "word": "семпл",
+  "type": "private",
   "duration": 2
+}
+###
+@roomId = {{createRoom.response.body.$.id}}
+###
+
+# @name guessWordIncorrect
+POST {{baseUrl}}/api/word/guess
+Content-Type: application/json
+
+{
+  "roomId": "{{roomId}}",
+  "word": "лесок"
 }
 
 ###
 
-POST http://localhost:3000/api/word/guess
+# @name guessWordCorrect
+POST {{baseUrl}}/api/word/guess
 Content-Type: application/json
 
 {
-  "roomId": "r_am0Ye-z4icm086C-rGp",
+  "roomId": "{{roomId}}",
   "word": "семпл"
 }
 
