@@ -89,8 +89,10 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
 
       if (validation.isValid) {
         gameState.value = 'won'
+        // TODO: send stats to server
       } else if (guesses.value.length >= rows) {
         gameState.value = 'lost'
+        // TODO: send stats to server
       }
     }
     current.value = ''
