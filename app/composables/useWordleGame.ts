@@ -1,12 +1,12 @@
 import type { GameState, TileState } from '#shared/types'
 import { DEFAULT_LOCALE, LETTERS_COUNT } from '#shared/constants'
-import { isValidRussianLetter, validateWordLength } from '#shared/utils/word'
+import { hasWord, isValidRussianLetter, validateWordLength } from '#shared/utils/word'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { updateKeyboardState } from '../utils/keyboardUtils'
 
 export interface UseWordleGameOptions {
-  roomId: string
+  solution: string
   maxRows?: number
 }
 
@@ -27,7 +27,7 @@ export interface UseWordleGameReturn {
 const locale = DEFAULT_LOCALE
 
 export function useWordleGame (options: UseWordleGameOptions): UseWordleGameReturn {
-  const { roomId, maxRows = 6 } = options
+  const { solution, maxRows = 6 } = options
 
   const rows = maxRows
   const cols = LETTERS_COUNT
@@ -46,7 +46,7 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
 
   type ErrorType = keyof typeof ERROR_TYPES
 
-  async function validateGuess (): Promise<{ isValid: boolean, error?: ErrorType, evaluation: TileState[] }> {
+  function validateGuess (): { isValid: boolean, error?: ErrorType, evaluation: TileState[] } {
     if (gameState.value !== 'playing') {
       return { isValid: false, error: 'INVALID_GAME_STATE', evaluation: [] }
     }
@@ -55,18 +55,13 @@ export function useWordleGame (options: UseWordleGameOptions): UseWordleGameRetu
       return { isValid: false, error: 'INVALID_WORD_LENGTH', evaluation: [] }
     }
 
-    try {
-      const validation = await $fetch('/api/word/guess', {
-        method: 'POST',
-        body: {
-          word: current.value,
-          roomId,
-        },
-      })
-      return validation
-    } catch {
+    if (!hasWord(current.value, normalizeWord(current.value))) {
       return { isValid: false, error: 'WORD_NOT_IN_DICTIONARY', evaluation: [] }
     }
+
+    const evaluation = evaluateGuess(current.value, solution)
+
+    return { isValid: evaluation.every(t => t === 'correct'), evaluation }
   }
 
   function handleValidationError (errorKey: ErrorType) {

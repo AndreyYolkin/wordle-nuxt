@@ -4,12 +4,18 @@
       <h1 class="text-xl font-bold">Слово дня</h1>
     </div>
 
-    <WordleGame v-if="data" :date-key="data.date" :room-id="data.id" :solution="data.word" />
+    <WordleGame v-if="data" :date-key="data.date" :solution="data.word" />
   </div>
 </template>
 
 <script setup lang="ts">
-  const { data } = await useFetch('/api/word/daily')
+  import { getStartOfDay } from '#shared/utils/timezone'
+  import { getWordByIndex } from '#shared/utils/word'
+
+  const data = {
+    word: getWordByIndex(getStartOfDay().toSeconds()),
+    date: getStartOfDay().toISODate(),
+  }
 
   useHead({
     title: 'Grawordle | Слово дня',
