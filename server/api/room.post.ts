@@ -41,6 +41,5 @@ export default defineEventHandler(async event => {
     word: finalWord,
     expiresAt: room.expiresAt,
     type: 'private',
-    shareUrl: `/room/${room.id}`,
   }
 })
