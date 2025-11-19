@@ -9,7 +9,8 @@
     "dev": "nuxt dev",
     "prepare": "mkdir .data",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit push",
+    "nuke": "node nuke.js"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
