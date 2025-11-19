@@ -21,5 +21,6 @@ try {
 } catch { /* empty */ }
 
 execSync('git reset --hard')
+execSync('git clean -df')
 
 execSync(`git checkout ${step}-step`)
