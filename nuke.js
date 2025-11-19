@@ -16,6 +16,9 @@ if (!validSteps.includes(step)) {
 try {
   rmSync('.data/wordle.db')
 } catch { /* empty */ }
+try {
+  rmSync('./server/db/migrations/', { recursive: true })
+} catch { /* empty */ }
 
 execSync('git reset --hard')
 
