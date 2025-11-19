@@ -7,10 +7,10 @@
     "build:client": "BUILD_FORMAT=client nuxt generate",
     "build": "BUILD_FORMAT=fullstack nuxt build",
     "dev": "nuxt dev",
-    "prepare": "mkdir .data",
+    "prepare": "node scripts/prepare.js",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit push",
-    "nuke": "node nuke.js"
+    "nuke": "node scripts/nuke.js"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
