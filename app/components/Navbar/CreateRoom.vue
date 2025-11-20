@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3 p-4 bg-white rounded-lg">
+  <div class="flex flex-col gap-3 p-4 bg-gray-400 rounded-lg">
     <div class="flex justify-between items-center">
       <h3 class="text-lg font-semibold text-slate-800">Создать комнату</h3>
       <button class="text-gray-400 hover:text-gray-600" @click="$emit('close')">
@@ -39,7 +39,7 @@
       <label class="text-sm font-medium text-slate-600">Ваше слово (5 букв)</label>
       <input
         v-model="customWord"
-        class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 text-slate-800 focus:border-transparent"
         maxlength="5"
         placeholder="Введите слово"
         type="text"
@@ -50,7 +50,7 @@
       <label class="text-sm font-medium text-slate-600">Время жизни комнаты (часы)</label>
       <input
         v-model.number="duration"
-        class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 text-slate-800 focus:border-transparent"
         max="168"
         min="1"
         type="number"
