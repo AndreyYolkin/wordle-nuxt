@@ -9,7 +9,8 @@
     "dev": "nuxt dev",
     "prepare": "node scripts/prepare.js",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit push",
+    "db:migrate:dev": "drizzle-kit push --config drizzle.config.dev.ts",
+    "db:migrate:prod": "drizzle-kit push --config drizzle.config.prod.ts",
     "nuke": "node scripts/nuke.js"
   },
   "dependencies": {
@@ -27,6 +28,8 @@
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
+    "@libsql/darwin-arm64": "^0.5.22",
+    "@libsql/linux-x64-gnu": "^0.5.22",
     "@types/luxon": "^3.7.1",
     "@unocss/nuxt": "^66.5.6",
     "dotenv": "^17.2.3",

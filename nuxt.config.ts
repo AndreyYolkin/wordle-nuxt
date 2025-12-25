@@ -5,4 +5,8 @@ export default defineNuxtConfig({
   experimental: {
     typedPages: true,
   },
+  runtimeConfig: {
+    TURSO_CONNECTION_URL: '',
+    TURSO_AUTH_TOKEN: '',
+  },
 })
